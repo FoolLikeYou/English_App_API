@@ -1,0 +1,7 @@
+input[type=checkbox] {
+display:none;
+}
+ 
+label {
+	font-size: x-large;
+ }

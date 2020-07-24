@@ -1,0 +1,14 @@
+*.log
+*.pot
+*.pyc
+__pycache__/
+db.sqlite3
+media
+myenv/
+ENV/
+myenv.bak/
+.dockerignore
+.idea
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
