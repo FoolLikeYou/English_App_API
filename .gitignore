@@ -7,7 +7,6 @@ media
 myenv/
 ENV/
 myenv.bak/
-.dockerignore
 .idea
 **/migrations/**
 !**/migrations
