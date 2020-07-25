@@ -1,7 +1,7 @@
 FROM python:3.8-alpine
 
 # set work directory
-WORKDIR /app
+WORKDIR /api
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -13,6 +13,8 @@ RUN apk update \
     && apk add --virtual build-deps gcc python3-dev musl-dev \
     && apk add postgresql-dev \
     && pip install psycopg2 \
+	&& apk add jpeg-dev zlib-dev libjpeg \
+    && pip install Pillow \
     && apk del build-deps
 
 # install dependencies
@@ -26,5 +28,6 @@ COPY . .
 RUN adduser -D myuser
 USER myuser
 
+
 # run gunicorn
-CMD gunicorn hello_django.wsgi:application --bind 0.0.0.0:$PORT
+CMD gunicorn test_api.wsgi:application --bind 0.0.0.0:$PORT
