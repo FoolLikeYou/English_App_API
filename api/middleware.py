@@ -7,11 +7,12 @@ from django.conf import settings
 def api_get_auth(get_response):
     def middleware(request):
 
-        if ('secret' not in request.headers):
-            return HttpResponse('Unauthorized', status=401)
         is_admin_page = (request.path.find("/admin/") >= 0)
 
-        if (settings.API_SECRET != '' and (is_admin_page == False)):
+        if (('secret' not in request.headers) and is_admin_page == False):
+            return HttpResponse('Unauthorized!', status=401)
+
+        if ((settings.API_SECRET != '') and (is_admin_page == False)):
                 if (request.headers['secret'] != settings.API_SECRET):
                     return HttpResponseForbidden()
 

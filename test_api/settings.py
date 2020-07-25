@@ -32,8 +32,8 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 DEBUG = True
 
 
-#ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.herokuapp.com']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'mysterious-spire-27734.herokuapp.com']
+#ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -96,9 +96,18 @@ DATABASES = {
     }
 }
 
-DATABASE_URL = os.environ.get('DATABASE_URL')
-db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True)
-DATABASES['default'].update(db_from_env)
+if 'DATABASE_URL' in os.environ:
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+    }
+else:
+    print("Postgres URL not found, using sqlite instead")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 
 # Password validation
