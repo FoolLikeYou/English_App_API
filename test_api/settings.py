@@ -26,14 +26,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', default='v%58h7s0^x%pz05^)8e_zdbvmqdg=
 
 DEBUG = int(os.environ.get('DEBUG', default=0))
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'mysterious-spire-27734.herokuapp.com']
-#ALLOWED_HOSTS = []
 
 
 # Application definition
