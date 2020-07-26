@@ -25,7 +25,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY', default='v%58h7s0^x%pz05^)8e_zdbvmqdg=)fmtk%o*3la1gy1j=v#g=')
 
 DEBUG = int(os.environ.get('DEBUG', default=0))
-#DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'mysterious-spire-27734.herokuapp.com']
 
@@ -42,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "rest_framework_api_key",
     'api',
+    'storages',
 
 
 ]
@@ -83,13 +83,6 @@ WSGI_APPLICATION = 'test_api.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 
 if 'DATABASE_URL' in os.environ:
     DATABASES = {
@@ -137,17 +130,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-
-STATIC_URL = '/static/'
-
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-STATICFILES_DIRS = [
-    os.path.join(PROJECT_ROOT, 'static'),
-]
-
 #чтобы использовать менеджмент секретов api через админку
 #раскомментуруйте  код ниже и установите  API_SECRET = ""
 """
@@ -162,16 +144,29 @@ API_KEY_CUSTOM_HEADER = "HTTP_SECRET"
 
 API_SECRET = "12"
 
-#STATIC_URL = '/static/'
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static', 'static_root')
-#STATICFILES_DIRS = (
-#    os.path.join(BASE_DIR, 'static', 'static_files'),
-#)
+USE_S3 = os.getenv('USE_S3')
 
+if USE_S3:
+    # aws settings
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+    AWS_DEFAULT_ACL = None
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    PUBLIC_MEDIA_LOCATION = '  media'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
+    DEFAULT_FILE_STORAGE = 'api.storage_backend.PublicMediaStorage'
+else:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'media')
+
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.0/howto/static-files/
 STATIC_URL = '/static/' 
 STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'static', 'static_files')] 
 STATIC_ROOT = os.path.join(BASE_DIR, 'collectstatic') 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'media')
+
