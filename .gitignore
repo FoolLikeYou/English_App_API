@@ -11,3 +11,4 @@ myenv.bak/
 **/migrations/**
 !**/migrations
 !**/migrations/__init__.py
+collectstatic

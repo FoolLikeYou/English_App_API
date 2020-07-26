@@ -23,6 +23,7 @@ jaraco.collections==3.0.0
 jaraco.functools==3.0.1
 jaraco.text==3.2.0
 jsonschema==3.2.0
+whitenoise==5.1.0
 kombu==3.0.37
 more-itertools==8.4.0
 of==1.0.1

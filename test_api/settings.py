@@ -24,8 +24,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.environ.get('SECRET_KEY', default='v%58h7s0^x%pz05^)8e_zdbvmqdg=)fmtk%o*3la1gy1j=v#g=')
 
-#DEBUG = int(os.environ.get('DEBUG', default=0))
-DEBUG = True
+DEBUG = int(os.environ.get('DEBUG', default=0))
+#DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'mysterious-spire-27734.herokuapp.com']
 
@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'api.middleware.api_get_auth',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -161,11 +162,16 @@ API_KEY_CUSTOM_HEADER = "HTTP_SECRET"
 
 API_SECRET = "12"
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static', 'static_root')
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static', 'static_files'),
-)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR,  'static', 'media')
+#STATIC_URL = '/static/'
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static', 'static_root')
+#STATICFILES_DIRS = (
+#    os.path.join(BASE_DIR, 'static', 'static_files'),
+#)
 
+STATIC_URL = '/static/' 
+STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'static', 'static_files')] 
+STATIC_ROOT = os.path.join(BASE_DIR, 'collectstatic') 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'media')
