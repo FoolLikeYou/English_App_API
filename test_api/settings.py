@@ -144,9 +144,9 @@ API_KEY_CUSTOM_HEADER = "HTTP_SECRET"
 
 API_SECRET = "12"
 
-USE_S3 = os.getenv('USE_S3')
-
-if USE_S3:
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.0/howto/static-files/
+if not DEBUG:
     # aws settings
     AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
@@ -157,16 +157,17 @@ if USE_S3:
     PUBLIC_MEDIA_LOCATION = '  media'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'api.storage_backend.PublicMediaStorage'
+    STATIC_URL = '/static/'
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static', 'static_files')]
+    STATIC_ROOT = os.path.join(BASE_DIR, 'collectstatic')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 else:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'media')
+    STATIC_URL = '/static/'
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static', 'static_files')]
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-STATIC_URL = '/static/' 
-STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'static', 'static_files')] 
-STATIC_ROOT = os.path.join(BASE_DIR, 'collectstatic') 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
