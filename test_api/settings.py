@@ -153,7 +153,7 @@ REST_FRAMEWORK = {
 API_KEY_CUSTOM_HEADER = "HTTP_SECRET"
 """
 
-API_SECRET = "123iuqeadjlcjieu983qoweedeth--i8j@FYRY"
+API_SECRET = os.environ.get('API_SECRET')
 
 #Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
