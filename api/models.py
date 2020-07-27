@@ -11,7 +11,7 @@ class Category(models.Model):
 
 class Level(models.Model):
     name = models.CharField(max_length=100)
-    code = models.IntegerField()
+    code = models.CharField(max_length=100)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):

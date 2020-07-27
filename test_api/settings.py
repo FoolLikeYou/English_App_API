@@ -22,12 +22,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = os.environ.get('SECRET_KEY', default='v%58h7s0^x%pz05^)8e_zdbvmqdg=)fmtk%o*3la1gy1j=v#g=')
+####
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 DEBUG = int(os.environ.get('DEBUG', default=0))
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'mysterious-spire-27734.herokuapp.com']
-
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(" ")
 
 # Application definition
 
@@ -88,6 +88,17 @@ if 'DATABASE_URL' in os.environ:
     DATABASES = {
         'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
     }
+elif int(os.environ.get('DOCKER_LOCAL', default=0)):
+    DATABASES = {
+        "default": {
+            "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+            "NAME": os.environ.get("SQL_DATABASE", os.path.join(BASE_DIR, "db.sqlite3")),
+            "USER": os.environ.get("SQL_USER", "user"),
+            "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
+            "HOST": os.environ.get("SQL_HOST", "localhost"),
+            "PORT": os.environ.get("SQL_PORT", "5432"),
+        }
+    }
 else:
     print("Postgres URL not found, using sqlite instead")
     DATABASES = {
@@ -142,11 +153,14 @@ REST_FRAMEWORK = {
 API_KEY_CUSTOM_HEADER = "HTTP_SECRET"
 """
 
-API_SECRET = "12"
+API_SECRET = "123iuqeadjlcjieu983qoweedeth--i8j@FYRY"
 
-USE_S3 = os.getenv('USE_S3')
+#Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-if USE_S3:
+
+if not DEBUG:
+
     # aws settings
     AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
@@ -157,16 +171,17 @@ if USE_S3:
     PUBLIC_MEDIA_LOCATION = '  media'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'api.storage_backend.PublicMediaStorage'
+    STATIC_URL = '/static/'
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static', 'static_files')]
+    STATIC_ROOT = os.path.join(BASE_DIR, 'collectstatic')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 else:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'media')
+    STATIC_URL = '/static/'
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static', 'static_files')]
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-STATIC_URL = '/static/' 
-STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'static', 'static_files')] 
-STATIC_ROOT = os.path.join(BASE_DIR, 'collectstatic') 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 

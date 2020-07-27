@@ -24,14 +24,12 @@ class ThemeAdmin(admin.ModelAdmin):
 
 @admin.register(Word)
 class WordAdmin(admin.ModelAdmin):
-    list_display = ('name', 'translation','transcription','example','custom_field')
-
+    list_display = ('name', 'translation','transcription','example', 'custom_field')
 
     def custom_field(self, obj):
         return format_html(f'<link rel="stylesheet" type="text/css" href="{settings.STATIC_URL}scripts/styles.css"><input type="checkbox" id="soundCheck{{1}}" onchange="PlaySound(\'{{0}}\', \'soundCheck{{1}}\', \'{{1}}\', \'un{{1}}\')"></input><label id="un{{1}}" for="soundCheck{{1}}">▶️</label><label class="soundLabel" id="{{1}}" for="soundCheck{{1}}">⏸️</label><script src="{settings.STATIC_URL}scripts/soundmanager2.js"></script><script src="{settings.STATIC_URL}scripts/Player.js"></script>',  obj.sound.url, obj.id)
 
     custom_field.short_description = "sound"
-
 
 
 

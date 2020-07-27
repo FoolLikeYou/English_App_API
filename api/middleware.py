@@ -7,7 +7,7 @@ from django.conf import settings
 def api_get_auth(get_response):
     def middleware(request):
 
-        is_admin_page = ((request.path.find("/admin/") >= 0) or (request.path.find("/static/") >= 0) or (request.path.find("/media/") >= 0))
+        is_admin_page = ((request.path.find("admin") >= 0) or (request.path.find("static") >= 0) or (request.path.find("media") >= 0))
 
         if (('secret' not in request.headers) and not is_admin_page):
             return HttpResponse('Unauthorized!', status=401)
